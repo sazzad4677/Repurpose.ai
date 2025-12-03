@@ -11,7 +11,6 @@ export async function getVideoData(videoUrl: string) {
             throw new Error("Video URL is required");
         }
 
-        // 1. Robust Video ID Extraction
         let videoId = "";
         try {
             // Handle standard URLs, Shorts, and mobile URLs
@@ -44,51 +43,68 @@ export async function getVideoData(videoUrl: string) {
 
         console.log("Extracted Video ID:", videoId);
 
-        // 2. Try youtube-transcript (Primary Method)
-        try {
-            console.log("Attempting youtube-transcript...");
-            const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
-            const transcriptText = transcriptItems
-                .map((item) => item.text)
-                .join(" ");
+        const MAX_RETRIES = 3;
+        const errorMessages: string[] = [];
 
-            if (transcriptText) {
-                console.log("Success with youtube-transcript");
-                return { transcript: transcriptText };
-            }
-        } catch (ytError: any) {
-            console.warn("youtube-transcript failed:", ytError.message);
-        }
+        for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+            console.log(`Attempt ${attempt}/${MAX_RETRIES} to fetch transcript...`);
 
-        // 3. Try youtubei.js (Fallback Method)
-        try {
-            console.log("Attempting youtubei.js fallback...");
-            const youtube = await Innertube.create();
-            const info = await youtube.getInfo(videoId);
-            const transcriptData = await info.getTranscript();
-
-            if (
-                transcriptData?.transcript?.content?.body?.initial_segments
-            ) {
-                const segments =
-                    transcriptData.transcript.content.body.initial_segments;
-                const transcriptText = segments
-                    .map((item: any) => item.snippet?.text || "")
-                    .filter((text: string) => text.length > 0)
+            try {
+                console.log("Attempting youtube-transcript...");
+                const transcriptItems = await YoutubeTranscript.fetchTranscript(videoId);
+                const transcriptText = transcriptItems
+                    .map((item) => item.text)
                     .join(" ");
 
                 if (transcriptText) {
-                    console.log("Success with youtubei.js");
+                    console.log("Success with youtube-transcript");
                     return { transcript: transcriptText };
                 }
+            } catch (ytError: any) {
+                console.warn(`youtube-transcript failed (Attempt ${attempt}):`, ytError.message);
+                errorMessages.push(`Attempt ${attempt} (youtube-transcript): ${ytError.message}`);
             }
-        } catch (innertubeError: any) {
-            console.error("youtubei.js fallback failed:", innertubeError.message);
+
+            // 3. Try youtubei.js (Fallback Method)
+            try {
+                console.log("Attempting youtubei.js fallback...");
+                const youtube = await Innertube.create();
+                const info = await youtube.getInfo(videoId);
+                const transcriptData = await info.getTranscript();
+
+                if (
+                    transcriptData?.transcript?.content?.body?.initial_segments
+                ) {
+                    const segments =
+                        transcriptData.transcript.content.body.initial_segments;
+                    const transcriptText = segments
+                        .map((item: any) => item.snippet?.text || "")
+                        .filter((text: string) => text.length > 0)
+                        .join(" ");
+
+                    if (transcriptText) {
+                        console.log("Success with youtubei.js");
+                        return { transcript: transcriptText };
+                    }
+                }
+            } catch (innertubeError: any) {
+                console.error(`youtubei.js fallback failed (Attempt ${attempt}):`, innertubeError.message);
+                errorMessages.push(`Attempt ${attempt} (youtubei.js): ${innertubeError.message}`);
+            }
+
+            // Wait before retrying, unless it's the last attempt
+            if (attempt < MAX_RETRIES) {
+                const delay = 1000 * attempt; // Progressive backoff: 1s, 2s
+                console.log(`Waiting ${delay}ms before next attempt...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
         }
 
+        console.error("All transcript fetch attempts failed.");
         throw new Error(
-            "Could not fetch transcript. The video might not have captions enabled.",
+            `Could not fetch transcript after ${MAX_RETRIES} attempts. Details: ${errorMessages.join("; ")}`
         );
+
     } catch (error: any) {
         console.error("getVideoData Error:", error);
         return { error: error.message || "Failed to fetch transcript" };
