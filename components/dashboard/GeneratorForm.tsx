@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getVideoData } from "@/actions/getVideoData";
+import axios, { AxiosProgressEvent } from "axios";
 
 export default function GeneratorForm() {
     const router = useRouter();
@@ -32,40 +33,18 @@ export default function GeneratorForm() {
             }
 
             console.log("Transcript fetched, length:", data.transcript.length);
-
-            // Step 2: Generate Content (Manual Fetch Stream)
             setStatus("generating");
 
-            const response = await fetch("/api/generate", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    prompt: JSON.stringify({ transcript: data.transcript, videoUrl: url }),
-                }),
+            await axios.post("/api/generate", {
+                prompt: JSON.stringify({ transcript: data.transcript, videoUrl: url }),
+            }, {
+                onDownloadProgress: (progressEvent: AxiosProgressEvent) => {
+                    const xhr = progressEvent.event?.target as XMLHttpRequest;
+                    if (xhr) {
+                        setGeneratedContent(xhr.responseText);
+                    }
+                }
             });
-
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-
-            const reader = response.body?.getReader();
-            if (!reader) {
-                throw new Error("No reader available");
-            }
-
-            const decoder = new TextDecoder();
-            let resultText = "";
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = decoder.decode(value, { stream: true });
-                resultText += chunk;
-                setGeneratedContent((prev) => prev + chunk);
-            }
 
             setStatus("success");
             router.refresh();
