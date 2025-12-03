@@ -2,6 +2,7 @@
 
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import HeaderCreditsClient from "./HeaderCreditsClient";
 import UpgradeButton from "./layout/UpgradeButton";
 
@@ -9,7 +10,8 @@ export default function Header() {
     return (
         <header className="border-b">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                <Link href="/" className="text-2xl font-bold">
+                <Link href="/" className="flex items-center gap-2 text-2xl font-semibold">
+                    <Image src="/logo.png" alt="Repurpose.ai Logo" width={40} height={40} className="object-contain" />
                     Repurpose.ai
                 </Link>
 
