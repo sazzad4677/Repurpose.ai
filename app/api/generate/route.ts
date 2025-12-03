@@ -4,7 +4,6 @@ import { auth } from "@clerk/nextjs/server";
 import dbConnect from "@/lib/db";
 import User from "@/models/User";
 import GeneratedContent from "@/models/GeneratedContent";
-import { getVideoData } from "@/actions/getVideoData";
 
 const openrouter = createOpenAI({
     baseURL: "https://openrouter.ai/api/v1",
@@ -19,7 +18,13 @@ export async function POST(req: Request) {
     try {
         const { prompt } = await req.json();
         // Parse the JSON string we sent from the frontend
-        const { transcript, videoUrl } = JSON.parse(prompt);
+        let promptData;
+        try {
+            promptData = typeof prompt === 'string' ? JSON.parse(prompt) : prompt;
+        } catch (e) {
+            promptData = { transcript: prompt };
+        }
+        const { transcript, videoUrl } = promptData;
 
         await dbConnect();
         const { userId: clerkUserId } = await auth();

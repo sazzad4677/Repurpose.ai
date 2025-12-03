@@ -1,10 +1,8 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { getCredits } from "@/actions/getCredits";
+import HeaderCreditsClient from "./HeaderCreditsClient";
 
-export default async function Header() {
-    const credits = await getCredits();
-
+export default function Header() {
     return (
         <header className="border-b">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -14,11 +12,7 @@ export default async function Header() {
 
                 <div className="flex items-center gap-4">
                     <SignedIn>
-                        {credits !== null && (
-                            <div className="mr-4 rounded-full bg-secondary px-3 py-1 text-sm font-medium">
-                                {credits} Credits
-                            </div>
-                        )}
+                        <HeaderCreditsClient />
                         <Link
                             href="/dashboard"
                             className="text-sm font-medium hover:underline"

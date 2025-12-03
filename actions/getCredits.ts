@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import dbConnect from "@/lib/db";
 import User from "@/models/User";
 
-export async function getCredits() {
+export async function getCreditsServer() {
     try {
         await dbConnect();
         const { userId: clerkUserId } = await auth();

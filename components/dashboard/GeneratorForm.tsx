@@ -3,13 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getVideoData } from "@/actions/getVideoData";
 import axios, { AxiosProgressEvent } from "axios";
+import { mutate } from "swr";
 
 export default function GeneratorForm() {
-    const router = useRouter();
     const [url, setUrl] = useState("");
     const [status, setStatus] = useState<"idle" | "fetching" | "generating" | "success" | "error">("idle");
     const [errorMessage, setErrorMessage] = useState("");
@@ -33,6 +32,7 @@ export default function GeneratorForm() {
             }
 
             console.log("Transcript fetched, length:", data.transcript.length);
+
             setStatus("generating");
 
             await axios.post("/api/generate", {
@@ -45,9 +45,8 @@ export default function GeneratorForm() {
                     }
                 }
             });
-
             setStatus("success");
-            router.refresh();
+            await mutate("/api/credits");
 
         } catch (error: any) {
             console.error("Error in form submit:", error);
