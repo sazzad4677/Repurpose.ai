@@ -17,8 +17,8 @@ export async function OPTIONS() {
 
 export async function GET() {
     try {
-        const credits = await getCreditsServer();
-        return NextResponse.json({ credits }, {
+        const data = await getCreditsServer();
+        return NextResponse.json(data, {
             headers: {
                 "Access-Control-Allow-Origin": ORIGIN,
                 "Access-Control-Allow-Methods": "GET,OPTIONS",

@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         } catch (e) {
             promptData = { transcript: prompt };
         }
-        const { transcript, videoUrl } = promptData;
+        const { transcript, videoUrl, title, tone, length } = promptData;
 
         await dbConnect();
         const { userId: clerkUserId } = await auth();
@@ -54,12 +54,24 @@ export async function POST(req: Request) {
         console.log("Transcript length:", transcript.length);
         const truncatedTranscript = transcript.slice(0, 20000); // Limit context
 
+        let systemInstruction = "You are an expert content creator. Turn the following YouTube transcript into a structured blog post with headings.";
+
+        if (tone) {
+            systemInstruction += ` Write in a ${tone} tone.`;
+        }
+
+        if (length) {
+            if (length === 'short') systemInstruction += " Keep the blog post concise and short (under 500 words).";
+            if (length === 'medium') systemInstruction += " Keep the blog post medium length (around 1000 words).";
+            if (length === 'long') systemInstruction += " Make the blog post comprehensive and long (over 1500 words).";
+        }
+
         const result = streamText({
             model: openrouter("openai/gpt-oss-20b:free"),
             messages: [
                 {
                     role: "user",
-                    content: `You are an expert content creator. Turn the following YouTube transcript into a structured blog post with headings.\n\n${truncatedTranscript}`,
+                    content: `${systemInstruction}\n\n${truncatedTranscript}`,
                 },
             ],
             onFinish: async ({ text }) => {
@@ -75,6 +87,7 @@ export async function POST(req: Request) {
                     await GeneratedContent.create({
                         userId: updatedUser._id,
                         originalUrl: videoUrl,
+                        title: title || "Untitled Video",
                         generatedText: text,
                     });
                 }

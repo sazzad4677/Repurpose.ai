@@ -11,6 +11,10 @@ const GeneratedContentSchema = new Schema(
             type: String,
             required: true,
         },
+        title: {
+            type: String,
+            required: false,
+        },
         generatedText: {
             type: String,
             required: true,

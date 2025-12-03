@@ -58,7 +58,21 @@ export async function getVideoData(videoUrl: string) {
 
                 if (transcriptText) {
                     console.log("Success with youtube-transcript");
-                    return { transcript: transcriptText };
+
+                    // Fetch title using oEmbed
+                    let title = "Untitled Video";
+                    try {
+                        const oembedUrl = `https://www.youtube.com/oembed?url=${videoUrl}&format=json`;
+                        const response = await fetch(oembedUrl);
+                        if (response.ok) {
+                            const data = await response.json();
+                            title = data.title;
+                        }
+                    } catch (e) {
+                        console.error("Failed to fetch title:", e);
+                    }
+
+                    return { transcript: transcriptText, title };
                 }
             } catch (ytError: any) {
                 console.warn(`youtube-transcript failed (Attempt ${attempt}):`, ytError.message);
@@ -84,7 +98,8 @@ export async function getVideoData(videoUrl: string) {
 
                     if (transcriptText) {
                         console.log("Success with youtubei.js");
-                        return { transcript: transcriptText };
+                        const title = info.basic_info.title || "Untitled Video";
+                        return { transcript: transcriptText, title };
                     }
                 }
             } catch (innertubeError: any) {

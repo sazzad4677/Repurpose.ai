@@ -19,6 +19,20 @@ const UserSchema = new Schema(
             type: String,
             default: "Free",
         },
+        stripeCustomerId: {
+            type: String,
+            unique: true,
+            sparse: true,
+        },
+        stripeSubscriptionId: {
+            type: String,
+        },
+        stripePriceId: {
+            type: String,
+        },
+        stripeCurrentPeriodEnd: {
+            type: Date,
+        },
     },
     { timestamps: true },
 );

@@ -1,6 +1,9 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+"use client";
+
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import HeaderCreditsClient from "./HeaderCreditsClient";
+import UpgradeButton from "./layout/UpgradeButton";
 
 export default function Header() {
     return (
@@ -13,6 +16,7 @@ export default function Header() {
                 <div className="flex items-center gap-4">
                     <SignedIn>
                         <HeaderCreditsClient />
+                        <UpgradeButton />
                         <Link
                             href="/dashboard"
                             className="text-sm font-medium hover:underline"
@@ -23,10 +27,15 @@ export default function Header() {
                     </SignedIn>
                     <SignedOut>
                         <SignInButton mode="modal">
-                            <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+                            <button className="text-sm font-medium text-muted-foreground hover:text-primary">
                                 Sign In
                             </button>
                         </SignInButton>
+                        <SignUpButton mode="modal">
+                            <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+                                Get Started
+                            </button>
+                        </SignUpButton>
                     </SignedOut>
                 </div>
             </div>

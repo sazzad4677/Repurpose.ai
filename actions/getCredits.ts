@@ -22,7 +22,11 @@ export async function getCreditsServer() {
             user = await User.create({ clerkUserId, email });
         }
 
-        return user.credits;
+        return {
+            credits: user.credits,
+            tier: user.tier,
+            stripeCurrentPeriodEnd: user.stripeCurrentPeriodEnd
+        };
     } catch (error) {
         console.error("Error fetching credits:", error);
         return null;
