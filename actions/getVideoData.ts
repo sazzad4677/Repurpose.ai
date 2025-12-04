@@ -69,7 +69,22 @@ export async function getVideoData(videoUrl: string) {
                             title = data.title;
                         }
                     } catch (e) {
-                        console.error("Failed to fetch title:", e);
+                        console.error("Failed to fetch title via oEmbed:", e);
+                    }
+
+                    // Fallback to Innertube if title is still "Untitled Video"
+                    if (title === "Untitled Video") {
+                        try {
+                            console.log("oEmbed failed or returned default title, trying Innertube fallback for title...");
+                            const youtube = await Innertube.create();
+                            const info = await youtube.getBasicInfo(videoId);
+                            if (info.basic_info.title) {
+                                title = info.basic_info.title;
+                                console.log("Success fetching title with Innertube:", title);
+                            }
+                        } catch (innertubeTitleError) {
+                            console.error("Failed to fetch title via Innertube fallback:", innertubeTitleError);
+                        }
                     }
 
                     return { transcript: transcriptText, title };
