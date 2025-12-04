@@ -80,10 +80,21 @@ export async function POST(req: Request) {
                 // Extract title from generated text if original title is missing or "Untitled Video"
                 let finalTitle = title;
                 if (!finalTitle || finalTitle === "Untitled Video") {
-                    const firstLine = text.split('\n')[0];
-                    // Remove markdown heading syntax (#, ##, etc.) and trim
-                    finalTitle = firstLine.replace(/^#+\s*/, '').trim();
-                    // Fallback if extraction fails or returns empty string
+                    const lines = text.split('\n');
+                    // Try to find a H1 or H2 header
+                    const headerLine = lines.find(line => line.startsWith('# ') || line.startsWith('## '));
+
+                    if (headerLine) {
+                        finalTitle = headerLine.replace(/^#+\s*/, '').trim();
+                    } else {
+                        // Fallback to first non-empty line
+                        const firstLine = lines.find(line => line.trim().length > 0);
+                        if (firstLine) {
+                            finalTitle = firstLine.replace(/^#+\s*/, '').trim();
+                        }
+                    }
+
+                    // Final fallback
                     if (!finalTitle) finalTitle = "Untitled Video";
                 }
 
