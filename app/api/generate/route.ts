@@ -76,6 +76,17 @@ export async function POST(req: Request) {
             ],
             onFinish: async ({ text }) => {
                 console.log("Stream finished. Generated text length:", text.length);
+
+                // Extract title from generated text if original title is missing or "Untitled Video"
+                let finalTitle = title;
+                if (!finalTitle || finalTitle === "Untitled Video") {
+                    const firstLine = text.split('\n')[0];
+                    // Remove markdown heading syntax (#, ##, etc.) and trim
+                    finalTitle = firstLine.replace(/^#+\s*/, '').trim();
+                    // Fallback if extraction fails or returns empty string
+                    if (!finalTitle) finalTitle = "Untitled Video";
+                }
+
                 // Atomic decrement
                 const updatedUser = await User.findOneAndUpdate(
                     { clerkUserId },
@@ -87,7 +98,7 @@ export async function POST(req: Request) {
                     await GeneratedContent.create({
                         userId: updatedUser._id,
                         originalUrl: videoUrl,
-                        title: title || "Untitled Video",
+                        title: finalTitle,
                         generatedText: text,
                     });
                 }
