@@ -89,20 +89,20 @@ export default function GeneratorForm() {
                                 <Search className="h-5 w-5" />
                             </div>
                             <Input
-                                placeholder="Paste YouTube URL to generate viral content..."
+                                placeholder="Paste YouTube URL..."
                                 value={url}
                                 onChange={(e) => setUrl(e.target.value)}
                                 disabled={status === "fetching" || status === "generating"}
                                 required
-                                className="h-14 pl-12 pr-4 text-lg border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400"
+                                className="h-12 md:h-14 pl-10 md:pl-12 pr-4 text-base md:text-lg border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-400"
                             />
                         </div>
 
                         <div className="flex items-center gap-2 px-2 pb-2 md:pb-0">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="icon" className="h-12 w-12 shrink-0 border-gray-200 text-gray-500 hover:text-gray-900 hover:bg-gray-50">
-                                        <SlidersHorizontal className="h-5 w-5" />
+                                    <Button variant="outline" size="icon" className="h-10 w-10 md:h-12 md:w-12 shrink-0 border-gray-200 text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                                        <SlidersHorizontal className="h-4 w-4 md:h-5 md:w-5" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-56">
@@ -125,16 +125,16 @@ export default function GeneratorForm() {
                             <Button
                                 type="submit"
                                 disabled={status === "fetching" || status === "generating"}
-                                className="h-12 px-8 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-300 hover:-translate-y-0.5"
+                                className="h-10 md:h-12 px-4 md:px-8 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all duration-300 hover:-translate-y-0.5 flex-1 md:flex-none"
                             >
                                 {status === "fetching" || status === "generating" ? (
                                     <>
-                                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                        Generating...
+                                        <Loader2 className="mr-2 h-4 w-4 md:h-5 md:w-5 animate-spin" />
+                                        <span className="text-sm md:text-base">Generating...</span>
                                     </>
                                 ) : (
                                     <>
-                                        Generate <Sparkles className="ml-2 h-5 w-5" />
+                                        <span className="text-sm md:text-base">Generate</span> <Sparkles className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                                     </>
                                 )}
                             </Button>

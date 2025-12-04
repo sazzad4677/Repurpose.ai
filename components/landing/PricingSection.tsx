@@ -56,7 +56,7 @@ export default function PricingSection() {
 
     return (
         <section id="pricing" className="py-24 relative">
-            <FadeIn className="container mx-auto px-4 md:px-6">
+            <FadeIn className="container mx-auto px-4 md:px-6 w-full">
                 <div className="text-center mb-16 max-w-3xl mx-auto">
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
                         Simple, Transparent Pricing
@@ -72,7 +72,7 @@ export default function PricingSection() {
                         return (
                             <div
                                 key={plan.slug}
-                                className={`relative rounded-3xl border p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 ${isCreator
+                                className={`relative rounded-3xl border p-6 md:p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 ${isCreator
                                     ? "border-purple-500 bg-background shadow-2xl shadow-purple-500/10 ring-2 ring-purple-500/20 md:scale-105 z-10"
                                     : "bg-background/50 backdrop-blur-sm"
                                     }`}
@@ -111,8 +111,8 @@ export default function PricingSection() {
                                     onClick={() => handleSubscribe(plan.priceId, plan.name)}
                                     disabled={loadingPlan === plan.name || (isCreator && tier === 'Creator')}
                                     className={`w-full h-12 rounded-full text-base font-bold transition-all duration-300 ${isCreator
-                                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40"
-                                        : ""
+                                        ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-105"
+                                        : "hover:bg-muted"
                                         }`}
                                     variant={isCreator ? "default" : "outline"}
                                 >

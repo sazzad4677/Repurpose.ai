@@ -10,18 +10,18 @@ export default function Header() {
     return (
         <header className="border-b">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
-                <Link href="/" className="flex items-center gap-2 text-2xl font-semibold">
-                    <Image src="/logo.png" alt="Repurpose.ai Logo" width={40} height={40} className="object-contain" />
-                    Repurpose.ai
+                <Link href="/" className="flex items-center gap-2 text-xl md:text-2xl font-semibold">
+                    <Image src="/logo.png" alt="Repurpose.ai Logo" width={32} height={32} className="object-contain md:w-[40px] md:h-[40px]" />
+                    <span>Repurpose.ai</span>
                 </Link>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                     <SignedIn>
                         <HeaderCreditsClient />
                         <UpgradeButton />
                         <Link
                             href="/dashboard"
-                            className="text-sm font-medium hover:underline"
+                            className="text-sm font-medium hover:underline hidden md:block"
                         >
                             Dashboard
                         </Link>

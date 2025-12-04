@@ -51,16 +51,17 @@ export default function UpgradeButton() {
             <button
                 onClick={handleUpgrade}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-full font-medium text-sm hover:opacity-90 transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full font-medium text-xs md:text-sm hover:opacity-90 transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
                 {isLoading ? (
                     <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Processing...
+                        <Loader2 className="h-3 w-3 md:h-4 md:w-4 animate-spin" />
+                        <span className="hidden md:inline">Processing...</span>
                     </>
                 ) : (
                     <>
-                        ⚡ Upgrade to Pro
+                        <span className="md:hidden">⚡ Upgrade</span>
+                        <span className="hidden md:inline">⚡ Upgrade to Pro</span>
                     </>
                 )}
             </button>
