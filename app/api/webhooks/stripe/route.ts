@@ -46,7 +46,7 @@ export async function POST(req: Request) {
                     // Calculate period end (approximate, or fetch from subscription object if needed)
                     // For simplicity in this webhook, we'll set it to 30 days from now or fetch properly if we had the sub object
                     // Better: Fetch subscription to get accurate period_end
-                    const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+                    const subscription = await stripe.subscriptions.retrieve(session.subscription as string) as any;
                     user.stripeCurrentPeriodEnd = new Date(subscription.current_period_end * 1000);
 
                     await user.save();

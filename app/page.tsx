@@ -1,14 +1,12 @@
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowRight, Sparkles, Zap, Video, FileText, Wand2, CheckCircle2 } from "lucide-react";
+import { Sparkles, Zap, CheckCircle2 } from "lucide-react";
 import TrustedBy from "@/components/landing/TrustedBy";
 import PricingSection from "@/components/landing/PricingSection";
 import { FadeIn } from "@/components/animations/FadeIn";
-import MockAiThinking from "@/components/landing/MockAiThinking";
-import MockBlogPost from "@/components/landing/MockBlogPost";
 import HeroInput from "@/components/landing/HeroInput";
+import HowItWorks from "@/components/landing/HowItWorks";
 import UpgradeButton from "@/components/layout/UpgradeButton";
 
 export default function Home() {
@@ -18,8 +16,8 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Sparkles className="h-5 w-5" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-primary/20 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700">
+              <Sparkles className="h-5 w-5 " />
             </div>
             <span>Repurpose.ai</span>
           </div>
@@ -37,18 +35,23 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <SignedOut>
               <SignInButton mode="modal">
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary cursor-pointer">
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary cursor-pointer hidden md:inline-flex">
                   Sign In
                 </Button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <Button size="sm" className="rounded-full px-6 shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white cursor-pointer">Get Started</Button>
+                <Button size="sm" className="rounded-full px-4 md:px-6 shadow-lg shadow-primary/20 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white cursor-pointer">
+                  Get Started
+                </Button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
               <UpgradeButton />
               <Link href="/dashboard">
-                <Button variant="outline" size="sm" className="cursor-pointer">Dashboard</Button>
+                <Button variant="outline" size="sm" className="cursor-pointer hidden md:inline-flex">Dashboard</Button>
+                <Button variant="outline" size="icon" className="cursor-pointer md:hidden">
+                  <Sparkles className="h-4 w-4" />
+                </Button>
               </Link>
               <UserButton />
             </SignedIn>
@@ -58,22 +61,23 @@ export default function Home() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative pt-24 pb-20 md:pt-32 md:pb-32 overflow-hidden">
+        <section className="relative pt-16 pb-16 md:pt-32 md:pb-32 overflow-hidden">
           {/* Background Effects */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/20 blur-[120px] rounded-full -z-10"></div>
-          <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-500/20 blur-[120px] rounded-full -z-10"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[600px] h-[90vw] md:h-[600px] bg-purple-600/20 blur-[80px] md:blur-[120px] rounded-full -z-10"></div>
+          <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full md:w-[800px] h-[50vh] md:h-[400px] bg-purple-500/20 blur-[80px] md:blur-[120px] rounded-full -z-10"></div>
 
-          <FadeIn className="container mx-auto px-4 md:px-6 flex flex-col items-center text-center gap-8 relative z-10">
+          <FadeIn className="container mx-auto px-4 md:px-6 flex flex-col items-center text-center gap-8 relative z-10 w-full">
             <div className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium transition-colors border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 backdrop-blur-sm">
               <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
               New: YouTube Shorts Support
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight max-w-5xl leading-tight">
+            <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight max-w-5xl leading-tight relative z-10">
               Turn YouTube Videos into <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600 animate-gradient">
                 Viral Blog Posts
               </span>
+              <div className="absolute inset-0 bg-purple-500/20 blur-[100px] -z-10 rounded-full opacity-50 pointer-events-none"></div>
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
@@ -91,7 +95,7 @@ export default function Home() {
         {/* Features Section (Bento Grid) */}
         <section id="features" className="py-24 bg-muted/30 relative">
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-grid-small-black/[0.2]"></div>
-          <FadeIn className="container mx-auto px-4 md:px-6 relative">
+          <FadeIn className="container mx-auto px-4 md:px-6 relative w-full">
             <div className="text-center mb-16 max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
                 Supercharge Your Content Workflow
@@ -101,7 +105,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full">
               {/* Card 1 */}
               <div className="group relative overflow-hidden rounded-3xl border bg-background p-8 hover:shadow-xl transition-all duration-300">
                 <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary">
@@ -156,78 +160,12 @@ export default function Home() {
         </section>
 
         {/* How It Works (Zig-Zag) */}
-        <section id="how-it-works" className="py-24 relative overflow-hidden">
-          <div className="container mx-auto px-4 md:px-6">
-            <FadeIn className="text-center mb-20">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">How It Works</h2>
-              <p className="text-lg text-muted-foreground">From video to viral post in three simple steps.</p>
-            </FadeIn>
-
-            <div className="space-y-24 max-w-5xl mx-auto">
-              {/* Step 1 */}
-              <FadeIn delay={0.1} className="flex flex-col md:flex-row items-center gap-12">
-                <div className="flex-1 space-y-6">
-                  <div className="h-12 w-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/20">1</div>
-                  <h3 className="text-3xl font-bold">Paste Your Video URL</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    Simply copy the link of any YouTube video or Short you want to repurpose. We handle the rest, extracting the transcript and context instantly.
-                  </p>
-                </div>
-                <div className="flex-1 relative">
-                  <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-50"></div>
-                  <div className="relative rounded-2xl border bg-background p-2 shadow-2xl rotate-1 hover:rotate-0 transition-transform">
-                    <div className="rounded-xl overflow-hidden border bg-muted/50 aspect-video flex items-center justify-center">
-                      <Input placeholder="https://youtube.com/watch?v=..." className="max-w-xs bg-background shadow-sm" readOnly />
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-
-              {/* Step 2 */}
-              <FadeIn delay={0.2} className="flex flex-col md:flex-row-reverse items-center gap-12">
-                <div className="flex-1 space-y-6">
-                  <div className="h-12 w-12 rounded-full bg-purple-600 text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-purple-600/20">2</div>
-                  <h3 className="text-3xl font-bold">AI Magic Happens</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    Our advanced AI analyzes the content, identifies key takeaways, and rewrites it into a perfectly structured blog post or article.
-                  </p>
-                </div>
-                <div className="flex-1 relative">
-                  <div className="absolute inset-0 bg-purple-600/20 blur-3xl rounded-full opacity-50"></div>
-                  <div className="relative rounded-2xl border bg-background p-2 shadow-2xl -rotate-1 hover:rotate-0 transition-transform">
-                    <div className="rounded-xl overflow-hidden border bg-muted/50 aspect-video flex items-center justify-center bg-background">
-                      <MockAiThinking />
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-
-              {/* Step 3 */}
-              <FadeIn delay={0.3} className="flex flex-col md:flex-row items-center gap-12">
-                <div className="flex-1 space-y-6">
-                  <div className="h-12 w-12 rounded-full bg-green-600 text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-green-600/20">3</div>
-                  <h3 className="text-3xl font-bold">Publish & Grow</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    Copy your new content, tweak it if you like, and publish it to your blog, newsletter, or social media. Watch your reach multiply.
-                  </p>
-                </div>
-                <div className="flex-1 relative">
-                  <div className="absolute inset-0 bg-green-600/20 blur-3xl rounded-full opacity-50"></div>
-                  <div className="relative rounded-2xl border bg-background p-2 shadow-2xl rotate-1 hover:rotate-0 transition-transform">
-                    <div className="rounded-xl overflow-hidden border bg-muted/50 aspect-video flex items-center justify-center bg-background">
-                      <MockBlogPost />
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
+        <HowItWorks />
 
         {/* CTA Section */}
-        <section className="py-24 relative overflow-hidden">
+        <section className="py-16 md:py-24 relative overflow-hidden">
           <FadeIn className="container mx-auto px-4 md:px-6 relative z-10">
-            <div className="bg-primary text-primary-foreground rounded-[2.5rem] p-12 md:p-24 text-center relative overflow-hidden shadow-2xl max-w-5xl mx-auto">
+            <div className="bg-primary text-primary-foreground rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-24 text-center relative overflow-hidden shadow-2xl max-w-5xl mx-auto">
               {/* Decorative circles */}
               <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
               <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>

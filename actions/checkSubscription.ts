@@ -35,11 +35,9 @@ export async function checkSubscription(sessionId: string) {
                 user.stripePriceId = PLANS.find(p => p.slug === 'creator')?.priceId;
                 user.tier = 'Creator';
                 user.credits = 50;
-
-                // Fetch subscription for accurate period end
                 // Fetch subscription for accurate period end
                 if (session.subscription) {
-                    const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+                    const subscription = await stripe.subscriptions.retrieve(session.subscription as string) as any;
                     if (subscription.current_period_end) {
                         user.stripeCurrentPeriodEnd = new Date(subscription.current_period_end * 1000);
                     } else {
