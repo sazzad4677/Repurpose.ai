@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCreditsServer } from "@/actions/getCredits";
 
-const ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
+const ORIGIN = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export async function OPTIONS() {
     return NextResponse.json(null, {
