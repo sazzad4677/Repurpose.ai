@@ -85,7 +85,7 @@ export default async function DashboardPage() {
             return (
               <Card key={item._id} className="group flex flex-col overflow-hidden hover:shadow-md transition-all duration-300 border-gray-100 bg-white shadow-sm">
                 {/* Thumbnail Area */}
-                <div className="relative aspect-video w-full bg-gray-100 overflow-hidden">
+                <a href={item.originalUrl} target="_blank" rel="noopener noreferrer" className="block relative aspect-video w-full bg-gray-100 overflow-hidden cursor-pointer">
                   {thumbnailUrl ? (
                     <img
                       src={thumbnailUrl}
@@ -98,13 +98,15 @@ export default async function DashboardPage() {
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors" />
-                </div>
+                </a>
 
                 <CardHeader className="p-4 pb-0 space-y-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <CardTitle className="text-base font-bold text-gray-900 line-clamp-2 leading-tight" title={displayTitle}>
-                      {displayTitle}
-                    </CardTitle>
+                    <a href={item.originalUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                      <CardTitle className="text-base font-bold text-gray-900 line-clamp-2 leading-tight hover:text-purple-600 transition-colors" title={displayTitle}>
+                        {displayTitle}
+                      </CardTitle>
+                    </a>
                     <CopyButton text={item.generatedText} />
                   </div>
                   <p className="text-xs text-gray-400">
